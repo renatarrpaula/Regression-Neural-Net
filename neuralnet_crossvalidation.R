@@ -58,7 +58,7 @@ form <- as.formula(paste('V6 ~',predictorVars,collapse='+'))
 ind <- sample(5,nrow(dadosN), replace = TRUE, prob = c(0.2,0.2,0.2,0.2,0.2))
 
 # vetor do erro por num de neuronios
-error.min.neur <- numeric(nmax-nmix +1)
+error.min.neur <- numeric(nmax-nmin +1)
 
 #contadores
 ctotal <- 5*(nmax-nmin+1)
