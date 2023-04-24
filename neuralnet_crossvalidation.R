@@ -86,7 +86,7 @@ for(neuronios in nmin:nmax){
       # Comparacao de erros do test set
       # predicao
       p.test <- compute(n,testing[,-ncol(testing)])
-      error.cross[k] <- sum((testing$y - p.test$net.result)^2)/nrow(testing)
+      error.cross[k] <- sum((testing$V6 - p.test$net.result)^2)/nrow(testing)
       
       #Contador
       print(paste("Iteracao: ", contador, "/", ctotal ))
@@ -125,7 +125,7 @@ print("--------------------Treino Final das Redes----------------------")
   
   # treino das redes
   n <- neuralnet(formula = form, data = training, hidden = hd, err.fct = "sse", 
-                 act.fct = "logistic", linear.output = T, lifesign = "full", threshold = 0.005)
+                 act.fct = "logistic", linear.output = T, lifesign = "full", threshold = 0.02)
   
   # Comparacao de erros do test set
   # predicao
@@ -147,7 +147,7 @@ print("--------------------Treino Final das Redes----------------------")
   training.unscaled<-training$V6*(max(dados$V6)-min(dados$V6))+min(dados$V6)
   
   p.test.unscaled <- p.test$net.result*(max(dados$V6)-min(dados$V6))+min(dados$V6)
-  testing.unscaled <- testing$y*(max(dados$V6)-min(dados$V6))+min(dados$V6)
+  testing.unscaled <- testing$V6*(max(dados$V6)-min(dados$V6))+min(dados$V6)
   
   # Mean Squared Error
   MSE.train<-sum((training.unscaled-p.train.unscaled)^2)/nrow(training)
