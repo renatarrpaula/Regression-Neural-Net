@@ -95,13 +95,13 @@ for(neuronios in nmin:nmax){
     }
     
     # erro por num de neuronios
-    error.min.neur[i] <- mean(error.cross)
+    error.min.neur[neuronios - nmin + 1] <- mean(error.cross)
 
     # comparacao para inicializacoes
-    if(error.min.neur[i] < error.min){
+    if(error.min.neur[neuronios - nmin + 1] < error.min){
       #net.op <- n
       hd <- neuronios
-      error.min <- error.min.neur[i]
+      error.min <- error.min.neur[neuronios - nmin + 1]
     }
   
 }  
