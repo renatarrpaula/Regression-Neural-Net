@@ -11,6 +11,9 @@ rm(list=ls())
 # ler arquivo
 dados <- read.table("airfoil_self_noise.dat", header = F)
 
+# numero de neuronios
+nmax <- 40
+nmin <- 30
 #########################################################################
 # Variavel de saida
 out <- "Scaled sound pressure level"
@@ -55,19 +58,16 @@ form <- as.formula(paste('V6 ~',predictorVars,collapse='+'))
 ind <- sample(5,nrow(dadosN), replace = TRUE, prob = c(0.2,0.2,0.2,0.2,0.2))
 
 # vetor do erro por num de neuronios
-error.min.neur <- numeric(15)
+error.min.neur <- numeric(nmax-nmix +1)
 
 #contadores
-ctotal <- 5*6
+ctotal <- 5*(nmax-nmin+1)
 contador <- 1
 
 error.min <- 100
 
 # definicao do melhor num de neur
-for(neuronios in 30:40){
-  
-  # vetor do erro das inicializacoes
-  verror.cross.mean <- numeric(11)
+for(neuronios in nmin:nmax){
   
   #vetor do erro - cross-validation
   error.cross <- numeric(5)
@@ -94,25 +94,21 @@ for(neuronios in 30:40){
       
     }
     
-    # media erro cross validation
-    verror.cross.mean[i] <- mean(error.cross)
+    # erro por num de neuronios
+    error.min.neur[i] <- mean(error.cross)
 
     # comparacao para inicializacoes
-    if(verror.cross.mean[i] < error.min){
+    if(error.min.neur[i] < error.min){
       #net.op <- n
       hd <- neuronios
-      error.min <- verror.cross.mean[i]
+      error.min <- error.min.neur[i]
     }
-  
-  
-  # erro por num de neuronios
-  error.min.neur[neuronios-3] <- error.min
   
 }  
  
 # plot do erro do cross para o num. de neuronios
 jpeg(file=paste("Erro -", out, "from", paste(names(dados)[-ncol(dados)], collapse = " "),".jpeg"))
-plot(seq(20,25), error.min.neur, type = "b", main = "Erro por Num de Neuronios", xlab = "Num de Neuronios", ylab = paste("Erro - ", out))
+plot(seq(nmin,nmax), error.min.neur, type = "b", main = "Erro por Num de Neuronios", xlab = "Num de Neuronios", ylab = paste("Erro - ", out))
 dev.off()
 
 
